@@ -1,0 +1,14 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <h1>{% block title %} Welcome to Calculator {% endblock %}</h1>
+    <form method="POST">
+        <p> Autonomie :</p><input type="autonomie" name="autonomie"><br>
+        <p> Ville de départ :</p><input type="ville_a" name="ville_a"><br>
+        <p> Ville d'arrivée :</p><input type="ville_b" name="ville_b"><br>
+        <p> Distance :</p><input type="distance" name="distance"><br>
+        <p> Vitesse Moyenne :</p><input type="vit_moy" name="vit_moy"><br>
+        <input type="submit" value="Submit">
+    </form>
+
+{% endblock %}
