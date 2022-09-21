@@ -3,4 +3,5 @@
 {% block content %}
     <h1>{% block title %} Welcome to Calculator {% endblock %}</h1>
     <p> Durée du trajet : {{ duree_trajet }}</p>
+    <iframe style='border:none' width='100%' height='100%'  src= {{ direction_trajet }} </iframe>
 {% endblock %}
