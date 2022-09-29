@@ -3,4 +3,10 @@ h1 {
     color: brown;
     text-align: center;
     padding: 10px;
+    
+}
+
+
+#carte{
+    height: 80vh;
 }

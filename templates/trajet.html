@@ -1,7 +1,61 @@
 {% extends 'base.html' %}
 
 {% block content %}
+<style>
+    #map { height: 512px; }
+</style>
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.1/dist/leaflet.css"
+   integrity="sha256-sA+zWATbFveLLNqWO2gtiw3HL/lh1giY/Inf1BJ0z14="
+   crossorigin=""/>
+   <!-- Ces deux balises link sont à insérer entre les deux balises existantes -->
+<link rel="stylesheet" href="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.css" />
+<link rel="stylesheet" href="https://unpkg.com/leaflet-routing-machine@latest/dist/leaflet-routing-machine.css" />
+ 
+    <!-- Make sure you put this AFTER Leaflet's CSS -->
+ <script src="https://unpkg.com/leaflet@1.9.1/dist/leaflet.js"
+   integrity="sha256-NDI0K41gVbWqfkkaHj15IzU7PtMoelkzyKp8TOaFQ3s="
+   crossorigin=""></script>
+   <!-- Ces deux balises script sont à insérer entre les deux balises existantes -->
+<script src="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.js"></script>
+<script src="https://unpkg.com/leaflet-routing-machine@latest/dist/leaflet-routing-machine.js"></script>
+
+
+
     <h1>{% block title %} Welcome to Calculator {% endblock %}</h1>
     <p> Durée du trajet : {{ duree_trajet }}</p>
-    <iframe style='border:none' width='100%' height='100%'  src= {{ direction_trajet }} </iframe>
+    <div id="map">
+	    <!-- Ici s'affichera la carte -->
+	</div>
+
+    <!--  <iframe style='border:none' width='100%' height='100%'  src= {{ direction_trajet }} </iframe> -->
+
+
+
+
+        <!-- Fichiers Javascript -->
+        <script type="text/javascript">
+
+            window.onload = function(){
+                // On initialise la carte sur les coordonnées GPS de Paris
+                let macarte = L.map('map').setView([48.852969, 2.349903], 13)
+
+                // On charge les tuiles depuis un serveur au choix, ici OpenStreetMap France
+                L.tileLayer('https://{s}.tile.openstreetmap.fr/osmfr/{z}/{x}/{y}.png', {
+                    attribution: 'données © <a href="//osm.org/copyright">OpenStreetMap</a>/ODbL - rendu <a href="//openstreetmap.fr">OSM France</a>',
+                    minZoom: 1,
+                    maxZoom: 20
+                }).addTo(macarte)
+
+                L.Routing.control({
+                    waypoints: [
+                        L.latLng(57.74, 11.94),
+                        L.latLng(57.6792, 11.949),
+                        L.latLng(57.749, 11.94),
+                    ],
+                    routeWhileDragging: true
+                }).addTo(macarte)
+            }
+
+
+        </script>
 {% endblock %}
