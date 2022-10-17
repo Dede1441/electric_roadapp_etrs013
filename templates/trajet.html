@@ -37,7 +37,7 @@
 
             window.onload = function(){
                 // On initialise la carte sur les coordonnées GPS de Paris
-                let macarte = L.map('map').setView([{{ map_center  }}], 13)
+                let macarte = L.map('map').setView([{{ map_center }}],5)
 
                 // On charge les tuiles depuis un serveur au choix, ici OpenStreetMap France
                 L.tileLayer('https://{s}.tile.openstreetmap.fr/osmfr/{z}/{x}/{y}.png', {
@@ -48,8 +48,8 @@
 
                 L.Routing.control({
                     waypoints: [
-                        L.latLng({{ geocode_zipa  }}),
-                        L.latLng({{ geocode_zipb  }}),
+                        L.latLng({{ geocode_zipa }}),
+                        L.latLng({{ geocode_zipb }}),
                     ],
                     routeWhileDragging: true
                 }).addTo(macarte)

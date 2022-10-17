@@ -48,29 +48,32 @@ def calcul_next_waypoint(waypoint_a, waypoint_b, autonomie):
     call = requests.get('https://api.openrouteservice.org/v2/directions/driving-car?api_key=5b3ce3597851110001cf6248fb5ed77adb0d4650a8daae0878b1a6ab&start=' + str(waypoint_a) + '&end=' + str(waypoint_b), headers=headers)
     compteur=0
     compteur_max=0
+    distance_tempo02 = {}
     for step in (call.json()['features'][0]['properties']['segments'][0]['steps']) :
         compteur_max +=1
 
     while True :
-        
 
         geo_location_distance=(call.json()['features'][0]['properties']['segments'][0]['steps'][compteur]['distance'])*0.001
 
         #incrémenter pour récupérer le prochain segment (addition des segments)
         distance_tempo = distance_tempo + geo_location_distance
- 
+        distance_tempo02[compteur] = distance_tempo
         #incrémenter pour calculer entre les waypoints
         compteur += 1
 
-        if int(distance_tempo) > int(autonomie) :
-            compteur = compteur - 1
+        if compteur == compteur_max :
+            compteur -= 1
+            break
+
+        if float(distance_tempo) > float(autonomie) :
+            compteur -= 1
             distance_tempo = distance_tempo - geo_location_distance
             break
             
-        if compteur == compteur_max :
-            break
-
-    waypoint_end=call.json()['features'][0]['geometry']['coordinates'][compteur]
+    last_waypoint_step=call.json()['features'][0]['properties']['segments'][0]['steps'][compteur]['way_points'][1]
+    waypoint_end=call.json()['features'][0]['geometry']['coordinates'][last_waypoint_step]
+    print(waypoint_end)
 
     return(waypoint_end,distance_tempo)
 

@@ -24,6 +24,9 @@
     <h1>{% block title %} Welcome to Calculator {% endblock %}</h1>
     <p> Durée du trajet : {{ duree_trajet }}</p>
     <p>Tous les waypoints : {{ all_waypoints }}</p>
+    <p>Centrage de map : {{ map_center }}</p>
+    <p> Point A : {{ geocode_zipa  }}</p>
+    <p> Point B : {{ geocode_zipb  }}</p>
     <div id="map">
 	    <!-- Ici s'affichera la carte -->
 	</div>
@@ -38,7 +41,7 @@
 
             window.onload = function(){
                 // On initialise la carte sur les coordonnées GPS de Paris
-                let macarte = L.map('map').setView([{{ map_center  }}], 13)
+                let macarte = L.map('map').setView([{{ map_center  }}], 6)
 
                 // On charge les tuiles depuis un serveur au choix, ici OpenStreetMap France
                 L.tileLayer('https://{s}.tile.openstreetmap.fr/osmfr/{z}/{x}/{y}.png', {
@@ -49,8 +52,7 @@
 
                 L.Routing.control({
                     waypoints: [
-                        L.latLng({{ geocode_zipa  }}),
-                        L.latLng({{ geocode_zipb  }}),
+                        L.latLng({{ geocode_zipa }}),{{ all_waypoints }}L.latLng({{ geocode_zipb }}),
                     ],
                     routeWhileDragging: true
                 }).addTo(macarte)

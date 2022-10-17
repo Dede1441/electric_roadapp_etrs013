@@ -23,39 +23,39 @@ def index():
 
 
         distance = electric_roadapp_requests_openmaps.getdistance(geocode_zipa,geocode_zipb)
-        if autonomie > str(distance) :
+        if float(autonomie) > float(distance) :
+            print("no calcul")
             #Calcul de la durée du trajet
             duree_trajet=electric_roadapp_client.duree_trajet(int(distance),vit_moy)
             #direction_trajet_autonomie_calcul = electric_roadapp_requests_openmaps.getpath(geocode_zipa,geocode_zipb)
             map_center = [0,1]
-            map_center[0] = int(geocode_zipa[0]) - int(geocode_zipb[0])
-            map_center[1] = int(geocode_zipa[1]) - int(geocode_zipb[1])
+            map_center[0] = (geocode_zipa[0] + geocode_zipb[0]) / 2
+            map_center[1] = (geocode_zipa[1] + geocode_zipb[1]) / 2
             map_center = str(map_center[1]) + ', ' + str(map_center[0])
             geocode_zipa = str(geocode_zipa[1]) + ', ' + str(geocode_zipa[0])
             geocode_zipb = str(geocode_zipb[1]) + ', ' + str(geocode_zipb[0])
 
             return render_template('trajet.html',duree_trajet=duree_trajet[0],geocode_zipa=geocode_zipa, geocode_zipb=geocode_zipb,map_center=map_center)
         else :
-            all_waypoints={}
-            compteur=0
+            print("waypoints")
+            all_waypoints = ''
             distance_restante = distance
             next_waypoint=electric_roadapp_requests_openmaps.calcul_next_waypoint(geocode_zipa,geocode_zipb,autonomie)
             duree_trajet=electric_roadapp_client.duree_trajet(int(distance),vit_moy)
-            while distance_restante > 1 :
+            while float(distance_restante) > float(autonomie) :
                 #request_charging_station=lookup_chargingstation(next_waypoint)
-                all_waypoints[compteur]=next_waypoint[0]
-                compteur += 1
-
+                temp_waypoint= "L.latLng(" + str(next_waypoint[0][1]) + ", " + str(next_waypoint[0][0]) + "),"
+                all_waypoints= all_waypoints + temp_waypoint
+                print(temp_waypoint)
                 distance_restante = distance_restante - next_waypoint[1]
 
                 #next_waypoint=request_charging_station
 
                 next_waypoint=electric_roadapp_requests_openmaps.calcul_next_waypoint(next_waypoint[0],geocode_zipb,autonomie)
-                
-
+            print(all_waypoints) 
             map_center = [0,1]
-            map_center[0] = int(geocode_zipa[0]) - int(geocode_zipb[0])
-            map_center[1] = int(geocode_zipa[1]) - int(geocode_zipb[1])
+            map_center[0] = (geocode_zipa[0] + geocode_zipb[0]) / 2
+            map_center[1] = (geocode_zipa[1] + geocode_zipb[1]) / 2
             map_center = str(map_center[1]) + ', ' + str(map_center[0])
             geocode_zipa = str(geocode_zipa[1]) + ', ' + str(geocode_zipa[0])
             geocode_zipb = str(geocode_zipb[1]) + ', ' + str(geocode_zipb[0])

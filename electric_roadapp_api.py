@@ -7,7 +7,7 @@ from wsgiref.simple_server import make_server
 
 class TimeOneTheRoad(ServiceBase):
     @rpc(Unicode, Integer, _returns=Iterable(Unicode))
-    def addition(ctx, number01, number02):
+    def calcul_heures(ctx, number01, number02):
         result = int(number01) / int(number02)
         yield u'La durée du trajet est de %s heures' % result
 
