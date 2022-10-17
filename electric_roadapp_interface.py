@@ -16,21 +16,51 @@ def index():
         autonomie = request.form['autonomie']
         ville_a = request.form['ville_a']
         ville_b = request.form['ville_b']
-        distance = request.form['distance']
+        #distance = request.form['distance']
         vit_moy = request.form['vit_moy']
-        if autonomie > distance :
+        geocode_zipa = electric_roadapp_requests_openmaps.getlocation(ville_a)
+        geocode_zipb = electric_roadapp_requests_openmaps.getlocation(ville_b)
+
+
+        distance = electric_roadapp_requests_openmaps.getdistance(geocode_zipa,geocode_zipb)
+        if autonomie > str(distance) :
             #Calcul de la durée du trajet
-            duree_trajet=electric_roadapp_client.duree_trajet(distance,vit_moy)
-            #=
-            geocode_zipa = electric_roadapp_requests_openmaps.getlocation(ville_a)
-            geocode_zipb = electric_roadapp_requests_openmaps.getlocation(ville_b)
+            duree_trajet=electric_roadapp_client.duree_trajet(int(distance),vit_moy)
+            #direction_trajet_autonomie_calcul = electric_roadapp_requests_openmaps.getpath(geocode_zipa,geocode_zipb)
+            map_center = [0,1]
+            map_center[0] = int(geocode_zipa[0]) - int(geocode_zipb[0])
+            map_center[1] = int(geocode_zipa[1]) - int(geocode_zipb[1])
+            map_center = str(map_center[1]) + ', ' + str(map_center[0])
+            geocode_zipa = str(geocode_zipa[1]) + ', ' + str(geocode_zipa[0])
+            geocode_zipb = str(geocode_zipb[1]) + ', ' + str(geocode_zipb[0])
 
-            direction_trajet_autonomie_calcul = electric_roadapp_requests_openmaps.getpath(geocode_zipa,geocode_zipb)
-
-            return render_template('trajet.html',duree_trajet=duree_trajet,geocode_zipa=geocode_zipa, geocode_zipb=geocode_zipb)
+            return render_template('trajet.html',duree_trajet=duree_trajet[0],geocode_zipa=geocode_zipa, geocode_zipb=geocode_zipb,map_center=map_center)
         else :
-            autonomie_manquante = int(distance) - int(autonomie)
-            return render_template('notenough.html',autonomie_manquante=autonomie_manquante)
+            all_waypoints={}
+            compteur=0
+            distance_restante = distance
+            next_waypoint=electric_roadapp_requests_openmaps.calcul_next_waypoint(geocode_zipa,geocode_zipb,autonomie)
+            duree_trajet=electric_roadapp_client.duree_trajet(int(distance),vit_moy)
+            while distance_restante > 1 :
+                #request_charging_station=lookup_chargingstation(next_waypoint)
+                all_waypoints[compteur]=next_waypoint[0]
+                compteur += 1
+
+                distance_restante = distance_restante - next_waypoint[1]
+
+                #next_waypoint=request_charging_station
+
+                next_waypoint=electric_roadapp_requests_openmaps.calcul_next_waypoint(next_waypoint[0],geocode_zipb,autonomie)
+                
+
+            map_center = [0,1]
+            map_center[0] = int(geocode_zipa[0]) - int(geocode_zipb[0])
+            map_center[1] = int(geocode_zipa[1]) - int(geocode_zipb[1])
+            map_center = str(map_center[1]) + ', ' + str(map_center[0])
+            geocode_zipa = str(geocode_zipa[1]) + ', ' + str(geocode_zipa[0])
+            geocode_zipb = str(geocode_zipb[1]) + ', ' + str(geocode_zipb[0])
+
+            return render_template('trajet_charge.html',duree_trajet=duree_trajet[0],geocode_zipa=geocode_zipa, geocode_zipb=geocode_zipb,map_center=map_center,all_waypoints=all_waypoints) #ne pas oublier l'envoi du tableau + trajet
 
         # Generate just a boring response
         #return 'The cities are %s and %s ' % (ville_a, ville_b) 
