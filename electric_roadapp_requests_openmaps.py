@@ -61,6 +61,10 @@ def calcul_next_waypoint(waypoint_a, waypoint_b, autonomie):
         distance_tempo02[compteur] = distance_tempo
         #incrémenter pour calculer entre les waypoints
         compteur += 1
+        
+        if float(distance_tempo) > float(autonomie) :
+            distance_tempo += 100 #Cheat_code pour surpasser le probleme d'autoroute + longue que l'autonomie. Avec les segments il serait possibles d'overcome ce problème
+            break
 
         if compteur == compteur_max :
             compteur -= 1
@@ -73,7 +77,7 @@ def calcul_next_waypoint(waypoint_a, waypoint_b, autonomie):
             
     last_waypoint_step=call.json()['features'][0]['properties']['segments'][0]['steps'][compteur]['way_points'][1]
     waypoint_end=call.json()['features'][0]['geometry']['coordinates'][last_waypoint_step]
-    print(waypoint_end)
+ 
 
     return(waypoint_end,distance_tempo)
 

@@ -9,7 +9,9 @@ class TimeOneTheRoad(ServiceBase):
     @rpc(Unicode, Integer, _returns=Iterable(Unicode))
     def calcul_heures(ctx, number01, number02):
         result = int(number01) / int(number02)
-        yield u'La durée du trajet est de %s heures' % result
+        float_result = int(round(((result % 1)*60), 0))
+        result = int(result)
+        yield u'%s heures %s minutes' % (result,float_result)
 
 application = Application([TimeOneTheRoad], 'spyne.examples.hello.soap',
                          in_protocol=Soap11(validator='lxml'),

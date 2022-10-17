@@ -1,13 +1,36 @@
 {% extends 'base.html' %}
 
 {% block content %}
-    <h1>{% block title %} Welcome to Calculator {% endblock %}</h1>
+    <h1>{% block title %} Welcome to ElectroAppCalculator {% endblock %}</h1>
+    <form class="form-group" method="GET">
+          <div class="form-group">
+            <label>Marque de votre vehicule</label>
+            <input class="form-control" aria-describedby="emailHelp" type=search name=search placeholder="Entrez la marque du vehicule">
+            <small id="emailHelp" class="form-text text-muted">Une fois la marque recherché, nous pourrons chercher le modèle</small>
+          </div>
+          <button type="submit" class="btn btn-primary mb-2">Rechercher</button>
+    </form>
+
     <form method="POST">
-        <p> Autonomie :</p><input type="autonomie" name="autonomie"><br>
-        <p> Ville de départ :</p><input type="ville_a" name="ville_a"><br>
-        <p> Ville d'arrivée :</p><input type="ville_b" name="ville_b"><br>
-        <p> Vitesse Moyenne :</p><input type="vit_moy" name="vit_moy"><br>
-        <input type="submit" value="Submit">
+        <div class="form-group">
+            <label>Modèle du vehicule, suivi de son autonomie moyenne</label>
+            <select class="form-control" type=autonomie name=autonomie>
+                {% for vehicule in list_vehicules %}
+                <option value= "{{vehicule}}" SELECTED>{{vehicule}}</option>"
+                {% endfor %}
+            </select>
+        </div>
+        <div class="form-group">
+            <label>Ville de départ & d'arrivée</label>
+        <input class="form-control" type="ville_a" name="ville_a" placeholder="Ville de départ, de préférence un code postal"><br>
+        <input class="form-control" type="ville_b" name="ville_b" placeholder="Ville d'arrivée, de préférence un code postal"><br>
+        </div>
+        <div>
+            <label>Votre vitesse moyenne</label>
+            <input class="form-control" type="number" name="vit_moy" placeholder="En km/h" min="10" max="250"><br>
+        </div>
+        <input type="submit" class="btn btn-primary" value="Calculer mon trajet">
+        
     </form>
 
 
