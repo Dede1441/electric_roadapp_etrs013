@@ -2,6 +2,7 @@ from ast import Try
 from math import dist
 import requests
 import json
+#import time
 
 def getaddress(waypoints) :
     headers = {
@@ -10,7 +11,10 @@ def getaddress(waypoints) :
     url = "https://api.openrouteservice.org/geocode/reverse?api_key=5b3ce3597851110001cf6248fb5ed77adb0d4650a8daae0878b1a6ab&point.lon=" + str(waypoints[0]) + "&point.lat=" + str(waypoints[1]) +"&layers=address&boundary.country=FR"
     call = requests.get(url ,headers=headers)
     location=json.loads(call.text)
-    address=location["features"][0]["properties"]["label"]
+    try:
+        address=location["features"][0]["properties"]["label"]
+    except :
+        address=waypoints
     return(address)
 
 
@@ -57,12 +61,12 @@ def calcul_next_waypoint(waypoint_a, waypoint_b, autonomie):
     headers = { 'Accept': 'application/json, application/geo+json, application/gpx+xml, img/png; charset=utf-8', }
     distance_tempo = 0
     call = requests.get('https://api.openrouteservice.org/v2/directions/driving-car?api_key=5b3ce3597851110001cf6248fb5ed77adb0d4650a8daae0878b1a6ab&start=' + str(waypoint_a) + '&end=' + str(waypoint_b), headers=headers)
+    #time.sleep(1)
     compteur=0
     compteur_max=0
     distance_tempo02 = {}
     for step in (call.json()['features'][0]['properties']['segments'][0]['steps']) :
         compteur_max +=1
-
     #Tentative de régler le problème de d'autonomie sur les longs segments tout en évitant la panne sèche
     #max_segment_size={}
     #for step in (call.json()['features'][0]['properties']['segments'][0]['steps']) :
@@ -81,18 +85,14 @@ def calcul_next_waypoint(waypoint_a, waypoint_b, autonomie):
         distance_tempo02[compteur] = distance_tempo
         #incrémenter pour calculer entre les waypoints
         compteur += 1
-        #print('distance_tempo=',distance_tempo)
-        #print('autonomie=',autonomie)
-
         #Tentative de régler le problème de d'autonomie sur les longs segments tout en évitant la panne sèche
         #if float(distance_tempo) > 2*(float(autonomie)) :
         #    autonomie += 100 #Cheat_code pour surpasser le probleme d'autoroute + longue que l'autonomie. Avec les segments il serait possibles d'overcome ce problème
         #    break
-
         if compteur == compteur_max :
             compteur -= 1
             break
-
+        print('distance_tempo=',distance_tempo,'autonomie=',autonomie)
         if float(distance_tempo) > float(autonomie) :
 
             #Eviter d'arriver en panne seche. Problème : si l'autonomie est plus petites que les segments, ça boucle. Tentatives de résolution plus hauts

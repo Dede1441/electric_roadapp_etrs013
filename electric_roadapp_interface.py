@@ -24,9 +24,6 @@ def index():
         #distance = request.form['distance']
         vit_moy = request.form['vit_moy']
 
-        if int(vit_moy) <= 0 :
-            vit_moy = 120
-
         geocode_zipa = electric_roadapp_requests_openmaps.getlocation(ville_a)
         geocode_zipb = electric_roadapp_requests_openmaps.getlocation(ville_b)
 
@@ -47,30 +44,37 @@ def index():
 
             return render_template('trajet.html',duree_trajet=duree_trajet[0],geocode_zipa=geocode_zipa, geocode_zipb=geocode_zipb,map_center=map_center)
         else :
-            #print('waypoints')
-            all_waypoints = ''
-            all_addresswaypoints = []
+
+            compteur=0
             distance_restante = distance
-            next_waypoint=electric_roadapp_requests_openmaps.calcul_next_waypoint(geocode_zipa,geocode_zipb,autonomie)
-            distance_restante = distance_restante - next_waypoint[1]
-            #duree_trajet=electric_roadapp_client.duree_trajet(int(distance),vit_moy)
+
             while float(distance_restante) > float(autonomie) :
-                #intérogation autour de str(next_waypoint[0][1]) + ", " + str(next_waypoint[0][0])
+                compteur+=1
+
+                if compteur == 1 :
+                    all_waypoints = ''
+                    all_addresswaypoints = []
+                    next_waypoint=electric_roadapp_requests_openmaps.calcul_next_waypoint(geocode_zipa,geocode_zipb,autonomie)
+                    distance_restante = distance_restante - next_waypoint[1]
+                
+                print('distance_restante=',distance_restante,'autonomie=',autonomie)
                 borne_waypoint=electric_roadapp_list_bornes.list_bornes(next_waypoint[0])
-                #print(borne_waypoint)
+                print(borne_waypoint)
                 
 
                 temp_waypoint= "L.latLng(" + str(borne_waypoint[0]) + ", " + str(borne_waypoint[1]) + "),"
                 all_waypoints= all_waypoints + temp_waypoint
 
                 borne_waypoint=list(reversed(borne_waypoint))
-                #temp_geowaypoint=str(borne_waypoint[0]) + "," + str(borne_waypoint[1])
+
                 temp_geowaypoint=electric_roadapp_requests_openmaps.getaddress(borne_waypoint)
                 all_addresswaypoints.append(temp_geowaypoint)
 
-                #print(autonomie)
                 next_waypoint=electric_roadapp_requests_openmaps.calcul_next_waypoint(borne_waypoint,geocode_zipb,autonomie)
-                distance_restante = distance_restante - next_waypoint[1]
+                if next_waypoint[1] < 10 :
+                    break
+                else:
+                    distance_restante = distance_restante - next_waypoint[1]
 
             map_center = [0,1]
             map_center[0] = (geocode_zipa[0] + geocode_zipb[0]) / 2
@@ -91,3 +95,5 @@ def index():
             vehicule=vehicules[0].replace(' ', '-') + ' ' + vehicules[1].replace(' ', '-') + ' ' + vehicules[2].replace(' ', '') + ' ' + str(vehicules[3]).replace(' ', '-')
             list_vehicules.append(vehicule)
         return render_template('index.html',list_vehicules=list_vehicules)
+
+#1. Probleme avec certain points qui n'ont pas d'adresses
