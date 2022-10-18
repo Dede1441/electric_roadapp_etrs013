@@ -21,7 +21,7 @@
 
 
 
-    <h1>{% block title %} Welcome to Calculator {% endblock %}</h1>
+    <h1>{% block title %} Votre trajet : {% endblock %}</h1>
     <h2> Durée du trajet : {{ duree_trajet }}</h2>
     <!--      <p>Tous les waypoints : {{ all_waypoints }}</p>
     <p>Centrage de map : {{ map_center }}</p>
@@ -30,6 +30,17 @@
     <div id="map">
 	    <!-- Ici s'affichera la carte -->
 	</div>
+
+    <div class="list-group">
+        <a href="#" class="list-group-item list-group-item-action active">
+          Liste des arrêts pour recharger
+        </a>
+        {% for addresswaypoints in all_addresswaypoints %}
+        <a href="#" class="list-group-item list-group-item-action disabled">
+            {{addresswaypoints}}
+        </a>
+        {% endfor %}
+      </div>
 
     <!--  <iframe style='border:none' width='100%' height='100%'  src= {{ direction_trajet }} </iframe> -->
 
@@ -57,7 +68,5 @@
                     routeWhileDragging: true
                 }).addTo(macarte)
             }
-
-
         </script>
 {% endblock %}

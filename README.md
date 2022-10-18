@@ -13,12 +13,12 @@ The API juste do somes math, this is for education purpose
 3. Activate venv `.venv\Script\Activate`
 4. Install requirements `pip install -r requirements.txt`
 5. Launch API : `/bin/python3 /home/rguernier/electric_roadapp_etrs013/electric_roadapp_api.p`
-4. Run the APP : flask --app electric_roadapp_interface run --host=0.0.0.0  
+4. Run the APP : `flask --app electric_roadapp_interface run --host=0.0.0.0`
 
 
 
 ### With docker 🐋
-Soon
+***Comming Soon***
 
 
 ### Question ?
