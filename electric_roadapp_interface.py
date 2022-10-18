@@ -68,8 +68,10 @@ def index():
                 borne_waypoint=list(reversed(borne_waypoint))
 
                 temp_geowaypoint=electric_roadapp_requests_openmaps.getaddress(borne_waypoint)
-                all_addresswaypoints.append(temp_geowaypoint)
-
+                try:
+                    all_addresswaypoints.append(temp_geowaypoint[0] + ' ' + temp_geowaypoint[1])
+                except:
+                    all_addresswaypoints.append(temp_geowaypoint[0])
                 next_waypoint=electric_roadapp_requests_openmaps.calcul_next_waypoint(borne_waypoint,geocode_zipb,autonomie)
                 if next_waypoint[1] < 10 :
                     break
@@ -83,7 +85,9 @@ def index():
             geocode_zipa = str(geocode_zipa[1]) + ', ' + str(geocode_zipa[0])
             geocode_zipb = str(geocode_zipb[1]) + ', ' + str(geocode_zipb[0])
 
-            return render_template('trajet_charge.html',duree_trajet=duree_trajet[0],geocode_zipa=geocode_zipa, geocode_zipb=geocode_zipb,map_center=map_center,all_waypoints=all_waypoints,all_addresswaypoints=all_addresswaypoints) #ne pas oublier l'envoi du tableau + trajet
+            vehicules=' '.join(str(e)for e in vehicules)
+
+            return render_template('trajet_charge.html',duree_trajet=duree_trajet[0],geocode_zipa=geocode_zipa, geocode_zipb=geocode_zipb,map_center=map_center,all_waypoints=all_waypoints,all_addresswaypoints=all_addresswaypoints,vehicules=vehicules) #ne pas oublier l'envoi du tableau + trajet
 
     else:  
         args = request.args

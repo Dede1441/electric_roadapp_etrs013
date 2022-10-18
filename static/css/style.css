@@ -6,6 +6,9 @@ h1 {
     
 }
 
+body {
+    padding-bottom: 60px;
+  }
 
 #carte{
     height: 80vh;

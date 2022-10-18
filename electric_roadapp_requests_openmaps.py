@@ -13,9 +13,11 @@ def getaddress(waypoints) :
     location=json.loads(call.text)
     try:
         address=location["features"][0]["properties"]["label"]
+        zipcode=location["features"][0]["properties"]["postalcode"]
     except :
         address=waypoints
-    return(address)
+        zipcode='error'
+    return(address,zipcode)
 
 
 def getlocation(zipcode) :
