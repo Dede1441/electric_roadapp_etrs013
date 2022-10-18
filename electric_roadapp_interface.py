@@ -57,9 +57,9 @@ def index():
                     next_waypoint=electric_roadapp_requests_openmaps.calcul_next_waypoint(geocode_zipa,geocode_zipb,autonomie)
                     distance_restante = distance_restante - next_waypoint[1]
                 
-                print('distance_restante=',distance_restante,'autonomie=',autonomie)
+                #print('distance_restante=',distance_restante,'autonomie=',autonomie)
                 borne_waypoint=electric_roadapp_list_bornes.list_bornes(next_waypoint[0])
-                print(borne_waypoint)
+                #print(borne_waypoint)
                 
 
                 temp_waypoint= "L.latLng(" + str(borne_waypoint[0]) + ", " + str(borne_waypoint[1]) + "),"
@@ -96,4 +96,4 @@ def index():
             list_vehicules.append(vehicule)
         return render_template('index.html',list_vehicules=list_vehicules)
 
-#1. Probleme avec certain points qui n'ont pas d'adresses
+#1. Probleme des segements trop long : il faudrait "casser les segments" pour aller recuperer une borne (type autoroute)

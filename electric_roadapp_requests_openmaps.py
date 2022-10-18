@@ -92,7 +92,7 @@ def calcul_next_waypoint(waypoint_a, waypoint_b, autonomie):
         if compteur == compteur_max :
             compteur -= 1
             break
-        print('distance_tempo=',distance_tempo,'autonomie=',autonomie)
+        #print('distance_tempo=',distance_tempo,'autonomie=',autonomie)
         if float(distance_tempo) > float(autonomie) :
 
             #Eviter d'arriver en panne seche. Problème : si l'autonomie est plus petites que les segments, ça boucle. Tentatives de résolution plus hauts
