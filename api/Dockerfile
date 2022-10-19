@@ -2,5 +2,5 @@ FROM python:3.9
 COPY . /app
 WORKDIR /app
 RUN pip install -r requirements.txt
-EXPOSE 8000
-CMD python electric_roadapp_api.py
+EXPOSE $PORT
+CMD gunicorn --workers=4 --bind 0.0.0.0:$PORT electric_roadapp_api:wsgi_application

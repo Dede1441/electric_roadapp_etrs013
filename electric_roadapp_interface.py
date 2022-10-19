@@ -100,4 +100,7 @@ def index():
             list_vehicules.append(vehicule)
         return render_template('index.html',list_vehicules=list_vehicules)
 
+if __name__ == "__main__" :
+    app.run(debug=True)
+
 #1. Probleme des segements trop long : il faudrait "casser les segments" pour aller recuperer une borne (type autoroute)

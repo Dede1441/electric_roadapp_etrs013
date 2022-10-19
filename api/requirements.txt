@@ -1,3 +1,4 @@
+gunicorn
 aniso8601==7.0.0
 attrs==22.1.0
 Automat==20.2.0

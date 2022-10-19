@@ -2,8 +2,17 @@
 from spyne import Application, rpc, ServiceBase, Iterable, Integer, Unicode
 from spyne.protocol.soap import Soap11
 from spyne.server.wsgi import WsgiApplication
-
 from wsgiref.simple_server import make_server
+from spyne.application import Application
+from spyne.decorator import srpc
+from spyne.service import ServiceBase
+from spyne.model.primitive import UnsignedInteger
+from spyne.server.wsgi import WsgiApplication
+from wsgiref.simple_server import make_server
+from spyne.protocol.soap.soap11 import Soap11
+
+#import os
+#port = int(os.environ.get('PORT',8000))
 
 class TimeOneTheRoad(ServiceBase):
     @rpc(Unicode, Integer, _returns=Iterable(Unicode))
@@ -19,5 +28,5 @@ application = Application([TimeOneTheRoad], 'spyne.examples.hello.soap',
 wsgi_application = WsgiApplication(application)
 
 
-server = make_server('0.0.0.0', 8000, wsgi_application)
-server.serve_forever()
+#server = make_server('0.0.0.0', port, wsgi_application)
+#server.serve_forever()
