@@ -18,7 +18,10 @@ The API juste do somes math, this is for education purpose
 
 
 ### With docker 🐋
-***Comming Soon***
+1. Build API app in api  : `docker build . --tag electroapp_api`
+2. Build APP : `docker build . --tag electroapp`
+3. Run containers : `docker run -p 8000:8000 -d electroapp_api:latest` && `docker run -p 5000:5000 -d electroapp:latest`
+
 
 
 ### Question ?

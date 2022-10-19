@@ -19,5 +19,5 @@ application = Application([TimeOneTheRoad], 'spyne.examples.hello.soap',
 wsgi_application = WsgiApplication(application)
 
 
-server = make_server('172.18.2.1', 8000, wsgi_application)
+server = make_server('0.0.0.0', 8000, wsgi_application)
 server.serve_forever()
